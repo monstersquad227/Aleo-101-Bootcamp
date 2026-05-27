@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Task3 - Private Multiplier Demo</title>
+  <style>
+    :root {
+      --bg: #fef3e2;
+      --card: #fffef9;
+      --text: #1e293b;
+      --muted: #64748b;
+      --accent: #ea580c;
+      --accent-2: #f97316;
+      --line: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 20%, #fed7aa 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, #fed7aa 0%, transparent 40%),
+        var(--bg);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .card {
+      width: min(600px, 100%);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 12px 32px rgba(234, 88, 12, 0.12);
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      color: var(--accent);
+    }
+    p {
+      margin: 0 0 20px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    label {
+      font-size: 13px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+      background: #fff;
+    }
+    input:focus {
+      border-color: var(--accent-2);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+    }
+    .actions {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+    }
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .ghost {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    .result {
+      margin-top: 18px;
+      padding: 14px;
+      border: 1px dashed #94a3b8;
+      border-radius: 10px;
+      background: #fff7ed;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .success { color: #16a34a; }
+    .error { color: #dc2626; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Private Multiplier Demo</h1>
+    <p>
+      一个 Task3 隐私计算演示：输入两个私有值，模拟 Leo 程序 <span class="mono">private_multiply</span> 的执行结果。
+      这个应用展示如何在零知识证明环境中进行私密乘法运算，实际接链时可将本地计算替换为钱包/SDK 调用。
+    </p>
+
+    <div class="grid">
+      <div>
+        <label for="a">私有输入 a</label>
+        <input id="a" type="number" value="12" min="0" />
+      </div>
+      <div>
+        <label for="b">私有输入 b</label>
+        <input id="b" type="number" value="8" min="0" />
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="primary" id="runBtn">执行私密乘法</button>
+      <button class="ghost" id="verifyBtn">验证结果</button>
+      <button class="ghost" id="resetBtn">重置</button>
+    </div>
+
+    <div class="result" id="result">
+      等待执行...
+    </div>
+  </main>
+
+  <script>
+    const aInput = document.getElementById('a');
+    const bInput = document.getElementById('b');
+    const runBtn = document.getElementById('runBtn');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const resultEl = document.getElementById('result');
+
+    function runPrivateMultiply() {
+      const a = Number(aInput.value);
+      const b = Number(bInput.value);
+
+      if (!Number.isFinite(a) || !Number.isFinite(b) || a < 0 || b < 0) {
+        resultEl.innerHTML = '<span class="error">请输入非负数字。</span>';
+        return;
+      }
+
+      // 本地模拟 Leo 程序 private_multiply(a, b)。
+      const result = a * b;
+      const txId = 'demo_' + Date.now();
+
+      resultEl.innerHTML = [
+        '<span class="success">执行成功</span>',
+        '<span class="mono">private_multiply(' + a + ', ' + b + ') = ' + result + '</span>',
+        '<span class="mono">Demo TxID: ' + txId + '</span>'
+      ].join('<br/>');
+    }
+
+    function verifyResult() {
+      const a = Number(aInput.value);
+      const b = Number(bInput.value);
+
+      if (!Number.isFinite(a) || !Number.isFinite(b) || a < 0 || b < 0) {
+        resultEl.innerHTML = '<span class="error">请输入非负数字。</span>';
+        return;
+      }
+
+      // 本地模拟 verify_result(a, b, expected)
+      const actual = a * b;
+      const isValid = true; // 模拟验证通过
+
+      resultEl.innerHTML = [
+        '<span class="success">验证通过</span>',
+        '<span class="mono">verify_result(' + a + ', ' + b + ', ' + actual + ') = ' + (isValid ? 'true' : 'false') + '</span>',
+        '<span>结果验证成功！计算正确。</span>'
+      ].join('<br/>');
+    }
+
+    function reset() {
+      aInput.value = 12;
+      bInput.value = 8;
+      resultEl.textContent = '等待执行...';
+    }
+
+    runBtn.addEventListener('click', runPrivateMultiply);
+    verifyBtn.addEventListener('click', verifyResult);
+    resetBtn.addEventListener('click', reset);
+  </script>
+</body>
+</html>
