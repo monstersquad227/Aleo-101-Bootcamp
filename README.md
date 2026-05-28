@@ -69,13 +69,13 @@
 * Aleo Concept
   * UTXO
 
-**第二章：Leo 入门：学会这门语言**（1 节课）5.19 - 5.24 | [课程](https://openbuild.xyz/learn/challenges/2097505722) | [task2](./task/task2.md)
+**第二章：Leo 入门：学会这门语言**（1 节课）5.19 - 5.24 | [课程](https://openbuild.xyz/learn/challenges/2097505722/1778499683) | [task2](./task/task2.md)
 
 * Leo语言语法基础入门和简单Demo
 
 * 融入AI Coding部分
 
-**第三章：建起来：从程序到 dApp**（1 节课）5.26 - 5.31 | [课程](https://openbuild.xyz/learn/challenges/2097505722) | [task3](./task/task3.md)
+**第三章：建起来：从程序到 dApp**（1 节课）5.26 - 5.31 | [课程](https://openbuild.xyz/learn/challenges/2097505722/1778499689) | [task3](./task/task3.md)
 
 * 基于Leo+前端+必要的SDK等构建一个有前端界面的隐私小应用
 * 融入AI Coding部分
