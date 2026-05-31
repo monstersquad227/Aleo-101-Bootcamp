@@ -230,25 +230,87 @@ learn/renyuantime/task3/
 └── screenshots/                 # demo 截图
 ```
 
-### 5.6 本地运行步骤（待实现后补全）
+### 5.6 本地运行步骤
+
+> 环境：macOS（Apple Silicon M4 / ARM64），Leo 4.1.0，Node v22+。
+> 更详细的一键启动说明见同目录 `README.md`。
 
 ```bash
-# 1) 编译 + 本地测试 Leo 程序
+cd learn/renyuantime/task3
+
+# ── 0) 安装 Leo CLI（若未安装）──────────────────────────────
+# 方式一：cargo（需先装 Rust）
+cargo install leo-lang
+# 方式二：直接下载 Apple Silicon 预编译二进制（本项目采用）
+#   https://github.com/ProvableHQ/leo/releases  → leo-lang-v4.1.0-aarch64-apple-darwin.zip
+leo --version          # 期望输出 leo 4.1.0
+
+# ── 1) 编译 + 本地真实执行 Leo 程序 ─────────────────────────
 cd credential_pass
-leo run issue <address> 820u32
-leo run prove_threshold "<credential>" 700u32
+# 首次需要一个本机账户（self.signer 由此私钥决定），已写入 .env
+leo account new --seed 1 --write
 
-# 2) 启动后端
-cd ../backend && node server.js
+# 设本机地址 SELF=aleo1r8a69q9z0v67t2w4ut4zamavyr09qr43vk7f584q6wpymg5qvg8scmerq8
+# (1) 发证方签发私密凭证（真实分数 820 进入私有 record）
+leo run issue_credential aleo1r8a69q9z0v67t2w4ut4zamavyr09qr43vk7f584q6wpymg5qvg8scmerq8 820u32
+# (2) 持证人证明「分数 ≥ 700」——把上一步输出的 record 整体作为入参
+leo run verify_threshold "{ owner: aleo1r8a...scmerq8.private, score: 820u32.private, _nonce: ...group.public, _version: 1u8.public }" 700u32
+#   → 达标：输出 true + final（公开计数 +1）
+#   → 把 820 换成 650 再验证 700：assert 失败（B1 未达标）
+#   → 把凭证签发给别的地址、再用本机签名验证：执行期拒绝（B2 非本人）
 
-# 3) 打开前端 web/index.html
+# ── 2) 启动后端（真实调用 leo run，无 JS 模拟）──────────────
+cd ../backend
+npm install
+node server.js        # 监听 http://localhost:3001
+
+# ── 3) 启动前端（静态页）────────────────────────────────────
+cd ../web
+python3 -m http.server 8080
+# 浏览器打开 http://localhost:8080/index.html
+```
+
+接口自测：
+
+```bash
+curl http://localhost:3001/health
+curl -X POST http://localhost:3001/api/issue \
+  -H 'Content-Type: application/json' \
+  -d '{"owner":"aleo1r8a69q9z0v67t2w4ut4zamavyr09qr43vk7f584q6wpymg5qvg8scmerq8","score":820}'
+curl -X POST http://localhost:3001/api/verify \
+  -H 'Content-Type: application/json' \
+  -d '{"credential":"<上一步返回的 record>","threshold":700}'
 ```
 
 ---
 
 ## 六、Demo 截图
 
-> 待实现完成后补充：发证、出证（达标/未达标对比）、真实执行输出、隐私要点说明等截图。
+所有截图均为前端真实联调 + 后端真实调用 `leo run` 的结果（无任何 JS 伪造计算）。
+
+### 6.1 发证方签发私密凭证
+
+发证方填入持证人地址与真实信用分 `820`，调用 `leo run issue_credential`，返回私有 `Credential` record；`score` 字段标注 `.private`，明文不上链。
+
+![发证方签发私密凭证](screenshots/01_issue.png)
+
+### 6.2 主流程：达标并通过（820 ≥ 700）
+
+持证人用凭证生成「达标」证明，`leo run verify_threshold` 真实返回 `true` 并触发 `final {}` 公开计数 +1；验证方面板（视角③）只显示「已通过」与公开计数，**真实分数全程不可见**。
+
+![达标并通过验证](screenshots/02_verify_pass.png)
+
+### 6.3 分支 B1：未达标（650 ≥ 700 失败）
+
+把分数换成 `650` 再证明「≥700」，Leo 执行期 `assert(score >= threshold)` 失败；界面显示「未达标，验证未通过」，且**依然不泄露 650 具体是多少**。
+
+![未达标，验证未通过](screenshots/03_verify_fail_threshold.png)
+
+### 6.4 分支 B2：非本人盗用凭证
+
+非 owner 账户拿别人的凭证验证，Leo 在执行授权阶段拒绝（`Input record must belong to the signer`）；界面显示「无权使用该凭证（非持有者）」。
+
+![非本人盗用被拒](screenshots/04_verify_fail_owner.png)
 
 ---
 
