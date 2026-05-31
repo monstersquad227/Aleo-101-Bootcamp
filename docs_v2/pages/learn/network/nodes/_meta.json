@@ -1,5 +1,5 @@
 {
-  "validators": "验证者",
-  "provers": "证明者",
-  "clients": "客户端"
+  "validators": "Validators",
+  "provers": "Provers",
+  "clients": "Clients"
 }
