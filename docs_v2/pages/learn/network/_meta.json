@@ -1,6 +1,6 @@
 {
-  "architecture": "Architecture",
-  "consensus": "Consensus",
-  "tokenomics": "Tokenomics",
-  "nodes": "Nodes"
+  "architecture": "核心架构",
+  "consensus": "共识机制",
+  "tokenomics": "代币经济",
+  "nodes": "节点"
 }
