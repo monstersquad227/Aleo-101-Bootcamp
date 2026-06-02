@@ -1,5 +1,5 @@
-- 昵称：codex-task4
-- GitHub 用户名：codex-task4
+- 昵称：Risker-C
+- GitHub 用户名：Risker-C
 - 微信：未填写
 - Aleo 钱包地址：aleo1lj2zs258vryvt853j3prn0gqxzch5v22u2a5md04zp7yvw8g5gpse6l8c6
 - 技术栈：Leo, JavaScript, HTML, CSS

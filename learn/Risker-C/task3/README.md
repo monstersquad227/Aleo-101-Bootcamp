@@ -7,7 +7,7 @@ Private Score Gate is a Leo + frontend privacy demo. A user owns a private score
 ## Files
 
 ```text
-learn/codex-task4/task3/
+learn/Risker-C/task3/
 ├── README.md
 ├── demo-screenshot.png
 ├── private_score_gate/
@@ -26,7 +26,7 @@ learn/codex-task4/task3/
 ## Local verification
 
 ```bash
-leo test --path learn/codex-task4/task3/private_score_gate
+leo test --path learn/Risker-C/task3/private_score_gate
 ```
 
 Result:
@@ -41,13 +41,13 @@ PASSED: test_private_score_gate.aleo/test_private_score_gate_flow
 Open directly:
 
 ```bash
-open learn/codex-task4/task3/web/index.html
+open learn/Risker-C/task3/web/index.html
 ```
 
 Or run a local server:
 
 ```bash
-cd learn/codex-task4/task3/web
+cd learn/Risker-C/task3/web
 python3 -m http.server 5173
 ```
 

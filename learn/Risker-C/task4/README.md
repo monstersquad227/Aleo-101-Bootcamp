@@ -7,7 +7,7 @@
 ## Files
 
 ```text
-learn/codex-task4/task4/
+learn/Risker-C/task4/
 ├── README.md
 └── private_counter/
     ├── .gitignore
@@ -19,8 +19,8 @@ learn/codex-task4/task4/
 ## Local verification
 
 ```bash
-leo build --path learn/codex-task4/task4/private_counter
-leo test --path learn/codex-task4/task4/private_counter
+leo build --path learn/Risker-C/task4/private_counter
+leo test --path learn/Risker-C/task4/private_counter
 ```
 
 Result:
@@ -43,7 +43,7 @@ Deployment command:
 
 ```bash
 PRIVATE_KEY="$PRIVATE_KEY" leo deploy \
-  --path learn/codex-task4/task4/private_counter \
+  --path learn/Risker-C/task4/private_counter \
   --network testnet \
   --endpoint https://api.explorer.provable.com/v1 \
   --broadcast \
@@ -54,7 +54,7 @@ Chain interaction command:
 
 ```bash
 PRIVATE_KEY="$PRIVATE_KEY" leo execute \
-  --path learn/codex-task4/task4/private_counter \
+  --path learn/Risker-C/task4/private_counter \
   new_counter \
   --network testnet \
   --endpoint https://api.explorer.provable.com/v1 \
